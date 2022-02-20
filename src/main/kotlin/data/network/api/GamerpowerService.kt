@@ -1,0 +1,13 @@
+package data.network.api
+
+import data.network.response.GiveAwayItem
+import retrofit2.http.GET
+import retrofit2.http.Query
+
+interface GamerpowerService {
+    @GET("giveaways")
+    suspend fun getAllGiveaways(): List<GiveAwayItem>
+
+    @GET("giveaway")
+    suspend fun getGiveawayDetails(@Query("id") id: Int): GiveAwayItem
+}
