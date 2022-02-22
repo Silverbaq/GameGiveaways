@@ -1,4 +1,6 @@
 // Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
@@ -25,14 +27,19 @@ fun App() {
     var giveawayDetailsIdState by mutableStateOf(0)
 
     MaterialTheme {
-        if (screenState == Screens.MAIN) {
-            GiveawaysScreen { itemId ->
-                giveawayDetailsIdState = itemId
-                screenState = Screens.DETAILS
-            }
-        } else {
-            GiveawayDetailsScreen(giveawayDetailsIdState) {
-                screenState = Screens.MAIN
+        Crossfade(targetState =  screenState, animationSpec = tween(1000)) { screen ->
+            when (screen) {
+                Screens.MAIN -> {
+                    GiveawaysScreen { itemId ->
+                        giveawayDetailsIdState = itemId
+                        screenState = Screens.DETAILS
+                    }
+                }
+                else -> {
+                    GiveawayDetailsScreen(giveawayDetailsIdState) {
+                        screenState = Screens.MAIN
+                    }
+                }
             }
         }
     }

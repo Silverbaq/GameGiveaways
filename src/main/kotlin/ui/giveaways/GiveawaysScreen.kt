@@ -1,5 +1,10 @@
 package ui.giveaways
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -13,6 +18,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,7 +37,7 @@ import utils.NetworkImage.loadNetworkImage
 fun GiveawaysScreen(onItemClicked: (Int) -> Unit) {
     val giveAwayViewModel: GiveawayViewModel by inject(GiveawayViewModel::class.java)
 
-    Column (modifier = Modifier.background(Color.DarkGray).fillMaxSize()) {
+    Column(modifier = Modifier.background(Color.DarkGray).fillMaxSize()) {
         Button(onClick = giveAwayViewModel::fetchAll) {
             Text("Fetch all")
         }
