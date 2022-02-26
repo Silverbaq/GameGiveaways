@@ -6,41 +6,66 @@ import data.repositories.GiveAwayRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import ui.giveaways.filter.Filter
 import utils.GiveawayFilters
 
 class GiveawayViewModel(private val giveAwayRepository: GiveAwayRepository) {
     private val scope = CoroutineScope(SupervisorJob())
-    private val plaforms = mutableListOf<String>()
+    private val platforms = mutableListOf<String>()
+
+    private val providerFilter = listOf(
+        Filter("Epic", false, GiveawayFilters.EPIC_GAMES_STORE),
+        Filter("Ubisoft", false, GiveawayFilters.UBISOFT),
+        Filter("GOG", false, GiveawayFilters.GOG),
+        Filter("Itch.io", false, GiveawayFilters.ITCHIO),
+        Filter("Battle.net", false, GiveawayFilters.BATTLENET),
+        Filter("Origin", false, GiveawayFilters.ORIGIN),
+    )
+
+    private val platformFilters = listOf(
+        Filter("PC", false, GiveawayFilters.PC),
+        Filter("Android", false, GiveawayFilters.ANDROID),
+        Filter("iOS", false, GiveawayFilters.IOS),
+        Filter("Switch", false, GiveawayFilters.SWITCH),
+        Filter("PS4", false, GiveawayFilters.PS4),
+        Filter("PS5", false, GiveawayFilters.PS5),
+        Filter("Xbox 360", false, GiveawayFilters.XBOX_360),
+        Filter("Xbox One", false, GiveawayFilters.XBOX_ONE),
+        Filter("Xbox Series XS", false, GiveawayFilters.XBOX_SERIES_XS),
+    )
+
+    val filterMap = mapOf(
+        "Platforms" to platformFilters,
+        "Providers" to providerFilter
+    )
 
     val giveawaysState = mutableStateOf<List<GiveAwayItem>>(emptyList())
-    var filterPCState = mutableStateOf(false)
 
     init {
         fetchAll()
     }
 
-    fun fetchAll() {
+    private fun fetchAll() {
         scope.launch {
             val giveaways = giveAwayRepository.fetchAllGiveaways()
             giveawaysState.value = giveaways
         }
     }
 
-    fun fetchFilteredGiveaways() {
+    private fun fetchFilteredGiveaways() {
         scope.launch {
-            val giveaways = giveAwayRepository.fetchGiveaways(plaforms)
+            val giveaways = giveAwayRepository.fetchGiveaways(platforms)
             giveawaysState.value = giveaways
         }
     }
 
-    fun onFilterPCClicked() {
-        filterPCState.value = !filterPCState.value
-        if (filterPCState.value) {
-            plaforms.add(GiveawayFilters.PC.name)
+    fun onFilterClicked(filter: Filter) {
+        if (filter.enabled) {
+            platforms.add(filter.value.value)
         } else {
-            plaforms.remove(GiveawayFilters.PC.name)
+            platforms.remove(filter.value.value)
         }
-        if (plaforms.size > 0) {
+        if (platforms.size > 0) {
             fetchFilteredGiveaways()
         } else {
             fetchAll()

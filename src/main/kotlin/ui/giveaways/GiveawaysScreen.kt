@@ -1,9 +1,13 @@
 package ui.giveaways
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -11,11 +15,10 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -25,10 +28,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.network.RetrofitBuilder
-import data.network.api.GamerpowerService
 import data.network.response.GiveAwayItem
 import data.repositories.GiveAwayRepository
 import org.koin.java.KoinJavaComponent.inject
+import ui.giveaways.filter.Filter
+import ui.giveaways.filter.FilterView
 import utils.NetworkImage.loadNetworkImage
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -106,188 +110,66 @@ fun GiveawayItemView(giveAwayItem: GiveAwayItem, onViewOfferClicked: (Int) -> Un
                 )
             }
         }
-
-
     }
 }
 
 @Composable
 fun GiveawayFilters(giveawayViewModel: GiveawayViewModel) {
-    Column(modifier = Modifier) {
-        Text("Filters")
+    val isVisible = remember { mutableStateOf(false) }
+
+    Column(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)) {
+        Text(
+            text = "Filters",
+            color = Color.White,
+            fontSize = 18.sp,
+            modifier = Modifier.clickable {
+                isVisible.value = !isVisible.value
+            }
+        )
+        AnimatedVisibility(
+            visible = isVisible.value,
+            enter = expandVertically(),
+            exit = shrinkVertically()
+        ) {
+            Column {
+                giveawayViewModel.filterMap.map { (title, filters) ->
+                    FilterRow(title, filters, giveawayViewModel::onFilterClicked)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun FilterRow(title: String, filters: List<Filter>, onItemSelected: (Filter) -> Unit) {
+    Column(
+
+    ) {
+        Text(
+            text = title,
+            color = Color.White,
+            fontSize = 8.sp
+        )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
         ) {
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("PC")
-                Checkbox(
-                    checked = giveawayViewModel.filterPCState.value,
-                    onCheckedChange = { giveawayViewModel.onFilterPCClicked() },
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("Steam")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("Epic")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("ubisoft")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("gog")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("itchio")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("ps4")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-
-
-
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("ps5")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("xbox-one")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("xbox-series-xs")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("switch")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("android")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("ios")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("vr")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("battlenet")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("origin")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("drm-free")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-            Column(modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("xbox-360")
-                Checkbox(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
+            filters.map { filter -> FilterView(filter, onItemSelected) }
         }
     }
 }
+
+@Preview
+@Composable
+fun FilterRowPreview() {
+    val filters = listOf(
+        Filter("PC", false, utils.GiveawayFilters.PC),
+        Filter("Steam", true, utils.GiveawayFilters.STEAM)
+    )
+    FilterRow("something", filters) { }
+}
+
 
 @Preview
 @Composable

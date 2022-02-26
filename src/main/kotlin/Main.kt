@@ -51,7 +51,7 @@ fun main() = application {
         modules(repositoryModule, giveawayModule, giveawayDetailsModule)
     }
 
-    Window(onCloseRequest = ::exitApplication) {
+    Window(title = "Game giveaways", onCloseRequest = ::exitApplication) {
         App()
     }
 }

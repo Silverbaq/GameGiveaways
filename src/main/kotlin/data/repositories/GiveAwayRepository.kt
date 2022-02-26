@@ -19,8 +19,8 @@ class GiveAwayRepository(private val giveAwayService: GamerpowerService) {
     }
 
     suspend fun fetchGiveaways(platforms: List<String>): List<GiveAwayItem> {
-        val params = platforms.joinToString { "$it" }.lowercase()
-        val giveaways = giveAwayService.getFilteredGiveaways("android")
+        val params = platforms.joinToString { "$it." }.dropLast(1)
+        val giveaways = giveAwayService.getFilteredGiveaways(params)
         giveawaysList.clear()
         giveawaysList.addAll(giveaways)
         return giveawaysList
