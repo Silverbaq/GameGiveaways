@@ -5,5 +5,5 @@ import ui.giveaways.filter.FilterProvider
 
 val giveawayModule = module {
     single { FilterProvider() }
-    single { GiveawayViewModel(get(), get()) }
+    single { GiveawayViewModel(get(), get(), get()) }
 }

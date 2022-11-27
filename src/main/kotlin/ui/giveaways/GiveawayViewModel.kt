@@ -14,8 +14,8 @@ import ui.giveaways.filter.FilterProvider
 class GiveawayViewModel(
     private val giveAwayRepository: GiveAwayRepository,
     private val filterProvider: FilterProvider,
+    private val scope: CoroutineScope,
 ) {
-    private val scope = CoroutineScope(SupervisorJob())
     private val platforms = mutableListOf<String>()
     var isLoading by mutableStateOf(false)
 

@@ -27,7 +27,7 @@ fun App() {
     var giveawayDetailsIdState by mutableStateOf(0)
 
     MaterialTheme {
-        Crossfade(targetState =  screenState, animationSpec = tween(1000)) { screen ->
+        Crossfade(targetState = screenState, animationSpec = tween(1000)) { screen ->
             when (screen) {
                 Screens.MAIN -> {
                     GiveawaysScreen { itemId ->
@@ -49,7 +49,7 @@ fun App() {
 fun main() = application {
     startKoin {
         printLogger()
-        modules(repositoryModule, giveawayModule, giveawayDetailsModule)
+        modules(appModule, repositoryModule, giveawayModule, giveawayDetailsModule)
     }
 
     Window(title = "Game giveaways", onCloseRequest = ::exitApplication) {
