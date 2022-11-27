@@ -6,13 +6,13 @@ import data.network.response.GiveAwayItem
 class GiveAwayRepository(private val giveAwayService: GamerpowerService) {
     private val giveawaysList = mutableListOf<GiveAwayItem>()
 
-    suspend fun fetchAllGiveaways() : List<GiveAwayItem> {
+    suspend fun fetchAllGiveaways(): List<GiveAwayItem> {
         val giveaways = giveAwayService.getAllGiveaways()
         giveawaysList.addAll(giveaways)
         return giveaways
     }
 
-    suspend fun fetchGiveawayDetails(id: Int) : GiveAwayItem {
+    suspend fun fetchGiveawayDetails(id: Int): GiveAwayItem {
         return giveAwayService.getGiveawayDetails(id)
     }
 
@@ -24,5 +24,5 @@ class GiveAwayRepository(private val giveAwayService: GamerpowerService) {
         return giveawaysList
     }
 
-    //fun getFilt
+    // fun getFilt
 }

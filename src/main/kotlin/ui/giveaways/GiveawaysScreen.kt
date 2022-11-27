@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,8 +50,7 @@ fun GiveawaysScreen(onItemClicked: (Int) -> Unit) {
             ) {
                 CircularProgressIndicator()
             }
-        }
-        else {
+        } else {
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
@@ -159,9 +157,7 @@ fun GiveawayFilters(filterMap: Map<String, List<Filter>>, onFilterClicked: (filt
 
 @Composable
 fun FilterRow(title: String, filters: List<Filter>, onItemSelected: (Filter) -> Unit) {
-    Column(
-
-    ) {
+    Column() {
         Text(
             text = title,
             color = Color.White,
@@ -186,7 +182,6 @@ fun FilterRowPreview() {
     )
     FilterRow("something", filters) { }
 }
-
 
 @Preview
 @Composable

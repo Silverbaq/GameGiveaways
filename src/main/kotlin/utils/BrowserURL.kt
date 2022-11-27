@@ -5,7 +5,6 @@ import java.net.URI
 import java.net.URISyntaxException
 import java.net.URL
 
-
 object BrowserURL {
     fun openWebpage(uri: URI): Boolean {
         val desktop = if (Desktop.isDesktopSupported()) Desktop.getDesktop() else null

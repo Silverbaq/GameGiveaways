@@ -1,7 +1,6 @@
 package ui.giveawaydetails
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,9 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -32,7 +29,6 @@ import java.net.URI
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-
 
 @Composable
 fun GiveawayDetailsScreen(itemId: Int, onBackClicked: () -> Unit) {
@@ -113,7 +109,7 @@ fun GiveawayDetailsHeader(giveAwayItem: GiveAwayItem) {
 
 @Composable
 fun GiveawayDetailsDescription(giveAwayItem: GiveAwayItem) {
-    Column (modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             modifier = Modifier.padding(top = 8.dp),
             text = giveAwayItem.description,
@@ -145,21 +141,23 @@ fun GiveawayActions(giveAwayItem: GiveAwayItem, onGetLootClicked: () -> Unit) {
     }
 
     Column(modifier = Modifier.background(Color.DarkGray).fillMaxWidth()) {
-        Column(modifier = Modifier
-            .width(400.dp)
-            .height(150.dp)
-            .padding(top = 8.dp, bottom = 8.dp)
-            .border(1.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
-            .background(Color(red = 54, green = 57, blue = 64))
-            .align(Alignment.CenterHorizontally)
+        Column(
+            modifier = Modifier
+                .width(400.dp)
+                .height(150.dp)
+                .padding(top = 8.dp, bottom = 8.dp)
+                .border(1.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
+                .background(Color(red = 54, green = 57, blue = 64))
+                .align(Alignment.CenterHorizontally)
         ) {
             Row {
-                Box(modifier = Modifier
-                    .width(200.dp)
-                    .height(50.dp)
-                    .padding(start = 16.dp, end = 8.dp, top = 16.dp)
-                    .background(Color(red = 54, green = 57, blue = 64))
-                    .border(1.dp, color = Color.Black, shape = RoundedCornerShape(4.dp))
+                Box(
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(50.dp)
+                        .padding(start = 16.dp, end = 8.dp, top = 16.dp)
+                        .background(Color(red = 54, green = 57, blue = 64))
+                        .border(1.dp, color = Color.Black, shape = RoundedCornerShape(4.dp))
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
@@ -168,12 +166,13 @@ fun GiveawayActions(giveAwayItem: GiveAwayItem, onGetLootClicked: () -> Unit) {
                     )
                 }
 
-                Box(modifier = Modifier
-                    .width(200.dp)
-                    .height(50.dp)
-                    .padding(start = 8.dp, end = 16.dp, top = 16.dp)
-                    .background(Color(red = 54, green = 57, blue = 64))
-                    .border(1.dp, color = Color.Black, shape = RoundedCornerShape(4.dp))
+                Box(
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(50.dp)
+                        .padding(start = 8.dp, end = 16.dp, top = 16.dp)
+                        .background(Color(red = 54, green = 57, blue = 64))
+                        .border(1.dp, color = Color.Black, shape = RoundedCornerShape(4.dp))
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),

@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import data.network.response.GiveAwayItem
 import data.repositories.GiveAwayRepository
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import ui.giveaways.filter.Filter
 import ui.giveaways.filter.FilterProvider

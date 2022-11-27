@@ -3,7 +3,6 @@ package data.network.api
 import data.network.response.GiveAwayItem
 import retrofit2.http.GET
 import retrofit2.http.Query
-import retrofit2.http.QueryMap
 
 interface GamerpowerService {
     @GET("giveaways")

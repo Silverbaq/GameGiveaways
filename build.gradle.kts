@@ -1,9 +1,11 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
     kotlin("jvm") version "1.7.20"
     id("org.jetbrains.compose") version "1.2.1"
+    id("org.jlleitschuh.gradle.ktlint") version "11.0.0"
 }
 
 group = "me.silverbaq"
@@ -13,6 +15,17 @@ repositories {
     google()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+}
+
+tasks.getByPath("build").dependsOn("ktlintFormat")
+
+ktlint {
+    ignoreFailures.set(false)
+    disabledRules.set(setOf("final-newline", "no-wildcard-imports"))
+    reporters {
+        reporter(ReporterType.PLAIN)
+        reporter(ReporterType.CHECKSTYLE)
+    }
 }
 
 dependencies {
