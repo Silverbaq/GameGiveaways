@@ -35,6 +35,7 @@ fun App() {
                         screenState = Screens.DETAILS
                     }
                 }
+
                 else -> {
                     GiveawayDetailsScreen(giveawayDetailsIdState) {
                         screenState = Screens.MAIN

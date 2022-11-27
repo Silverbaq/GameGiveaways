@@ -7,8 +7,6 @@ class GiveAwayRepository(private val giveAwayService: GamerpowerService) {
     private val giveawaysList = mutableListOf<GiveAwayItem>()
 
     suspend fun fetchAllGiveaways() : List<GiveAwayItem> {
-        if (giveawaysList.isNotEmpty()) return giveawaysList
-
         val giveaways = giveAwayService.getAllGiveaways()
         giveawaysList.addAll(giveaways)
         return giveaways
@@ -25,4 +23,6 @@ class GiveAwayRepository(private val giveAwayService: GamerpowerService) {
         giveawaysList.addAll(giveaways)
         return giveawaysList
     }
+
+    //fun getFilt
 }

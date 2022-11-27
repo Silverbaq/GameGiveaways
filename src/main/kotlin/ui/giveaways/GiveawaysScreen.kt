@@ -9,16 +9,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -27,29 +30,43 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import data.network.RetrofitBuilder
 import data.network.response.GiveAwayItem
-import data.repositories.GiveAwayRepository
 import org.koin.java.KoinJavaComponent.inject
 import ui.giveaways.filter.Filter
 import ui.giveaways.filter.FilterView
 import utils.NetworkImage.loadNetworkImage
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GiveawaysScreen(onItemClicked: (Int) -> Unit) {
     val giveAwayViewModel: GiveawayViewModel by inject(GiveawayViewModel::class.java)
 
     Column(modifier = Modifier.background(Color.DarkGray).fillMaxSize()) {
-        GiveawayFilters(giveAwayViewModel)
-        LazyVerticalGrid(
-            cells = GridCells.Fixed(3),
-            contentPadding = PaddingValues(8.dp)
-        ) {
-            itemsIndexed(giveAwayViewModel.giveawaysState.value) { index, item ->
-                GiveawayItemView(item) { onItemClicked(item.id) }
+        GiveawayFilters(giveAwayViewModel.filters, giveAwayViewModel::onFilterClicked)
+
+        if (giveAwayViewModel.isLoading) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator()
             }
         }
+        else {
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                contentPadding = PaddingValues(8.dp)
+            ) {
+                itemsIndexed(giveAwayViewModel.giveawaysState) { _, item ->
+                    GiveawayItemView(item) { onItemClicked(item.id) }
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        giveAwayViewModel.onViewReady()
     }
 }
 
@@ -114,7 +131,7 @@ fun GiveawayItemView(giveAwayItem: GiveAwayItem, onViewOfferClicked: (Int) -> Un
 }
 
 @Composable
-fun GiveawayFilters(giveawayViewModel: GiveawayViewModel) {
+fun GiveawayFilters(filterMap: Map<String, List<Filter>>, onFilterClicked: (filter: Filter) -> Unit) {
     val isVisible = remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)) {
@@ -132,8 +149,8 @@ fun GiveawayFilters(giveawayViewModel: GiveawayViewModel) {
             exit = shrinkVertically()
         ) {
             Column {
-                giveawayViewModel.filterMap.map { (title, filters) ->
-                    FilterRow(title, filters, giveawayViewModel::onFilterClicked)
+                filterMap.map { (title, filters) ->
+                    FilterRow(title, filters, onFilterClicked)
                 }
             }
         }
@@ -174,7 +191,20 @@ fun FilterRowPreview() {
 @Preview
 @Composable
 fun GiveawayFiltersPreview() {
-    GiveawayFilters(GiveawayViewModel(GiveAwayRepository(RetrofitBuilder.gamerPowerService)))
+    val filters = mapOf(
+        "Providers" to listOf(
+            Filter("Epic", false, utils.GiveawayFilters.EPIC_GAMES_STORE),
+            Filter("Origin", false, utils.GiveawayFilters.ORIGIN),
+        ),
+        "Platforms" to listOf(
+            Filter("Android", false, utils.GiveawayFilters.ANDROID),
+            Filter("Ios", false, utils.GiveawayFilters.IOS)
+        )
+    )
+
+    val onFilterClicked: (Filter) -> Unit = {}
+
+    GiveawayFilters(filters, onFilterClicked)
 }
 
 @Preview

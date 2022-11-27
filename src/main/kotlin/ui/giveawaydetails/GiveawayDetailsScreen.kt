@@ -39,7 +39,7 @@ fun GiveawayDetailsScreen(itemId: Int, onBackClicked: () -> Unit) {
     val giveAwayDetailsViewModel: GiveawayDetailsViewModel by KoinJavaComponent.inject(GiveawayDetailsViewModel::class.java)
     giveAwayDetailsViewModel.onViewReady(itemId)
 
-    Column(modifier = Modifier.background(Color.DarkGray).fillMaxWidth().padding(8.dp)) {
+    Column(modifier = Modifier.background(Color.DarkGray).fillMaxSize().padding(8.dp)) {
         Button(onClick = { onBackClicked() }) {
             Text("Back")
         }

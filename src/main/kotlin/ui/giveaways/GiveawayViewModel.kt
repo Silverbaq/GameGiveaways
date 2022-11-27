@@ -1,61 +1,44 @@
 package ui.giveaways
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import data.network.response.GiveAwayItem
 import data.repositories.GiveAwayRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import ui.giveaways.filter.Filter
-import utils.GiveawayFilters
+import ui.giveaways.filter.FilterProvider
 
-class GiveawayViewModel(private val giveAwayRepository: GiveAwayRepository) {
+class GiveawayViewModel(
+    private val giveAwayRepository: GiveAwayRepository,
+    private val filterProvider: FilterProvider,
+) {
     private val scope = CoroutineScope(SupervisorJob())
     private val platforms = mutableListOf<String>()
+    var isLoading by mutableStateOf(false)
 
-    private val providerFilter = listOf(
-        Filter("Epic", false, GiveawayFilters.EPIC_GAMES_STORE),
-        Filter("Ubisoft", false, GiveawayFilters.UBISOFT),
-        Filter("GOG", false, GiveawayFilters.GOG),
-        Filter("Itch.io", false, GiveawayFilters.ITCHIO),
-        Filter("Battle.net", false, GiveawayFilters.BATTLENET),
-        Filter("Origin", false, GiveawayFilters.ORIGIN),
-    )
+    val filters: Map<String, List<Filter>>
+        get() = filterProvider.filters
 
-    private val platformFilters = listOf(
-        Filter("PC", false, GiveawayFilters.PC),
-        Filter("Android", false, GiveawayFilters.ANDROID),
-        Filter("iOS", false, GiveawayFilters.IOS),
-        Filter("Switch", false, GiveawayFilters.SWITCH),
-        Filter("PS4", false, GiveawayFilters.PS4),
-        Filter("PS5", false, GiveawayFilters.PS5),
-        Filter("Xbox 360", false, GiveawayFilters.XBOX_360),
-        Filter("Xbox One", false, GiveawayFilters.XBOX_ONE),
-        Filter("Xbox Series XS", false, GiveawayFilters.XBOX_SERIES_XS),
-    )
-
-    val filterMap = mapOf(
-        "Platforms" to platformFilters,
-        "Providers" to providerFilter
-    )
-
-    val giveawaysState = mutableStateOf<List<GiveAwayItem>>(emptyList())
-
-    init {
-        fetchAll()
-    }
+    var giveawaysState by mutableStateOf<List<GiveAwayItem>>(emptyList())
 
     private fun fetchAll() {
         scope.launch {
+            isLoading = true
             val giveaways = giveAwayRepository.fetchAllGiveaways()
-            giveawaysState.value = giveaways
+            giveawaysState = giveaways
+            isLoading = false
         }
     }
 
     private fun fetchFilteredGiveaways() {
         scope.launch {
+            isLoading = true
             val giveaways = giveAwayRepository.fetchGiveaways(platforms)
-            giveawaysState.value = giveaways
+            giveawaysState = giveaways
+            isLoading = false
         }
     }
 
@@ -70,5 +53,9 @@ class GiveawayViewModel(private val giveAwayRepository: GiveAwayRepository) {
         } else {
             fetchAll()
         }
+    }
+
+    fun onViewReady() {
+        fetchAll()
     }
 }
